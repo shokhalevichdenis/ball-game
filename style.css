@@ -1,0 +1,21 @@
+canvas {
+    display: block;
+    margin: auto;
+    border: solid 1px lightgray;
+    box-shadow: #5151ab 0px 0px 18px -9px;
+    border-radius: 10px 10px 0px 0px;
+    background: white;
+    position: relative;
+}
+
+#poo {
+    display: none;
+    width: 20px;
+    height: 20px;
+}
+
+.game_title{
+    font-family: monospace;
+    font-size: 43px;
+    text-align: center;
+}
