@@ -6,13 +6,12 @@
 // Longer board / wider canvas
 // Process when dx = 0;
 // try to make the logic of the bound on the board progressive
-// Pause music after each level.
 
 // Canvas
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
-var x = getRndInteger(30, canvas.width-30); //ball coordinate
+var x = getRndInteger(30, canvas.width-60); //ball coordinate
 var y = canvas.height-30; // ball coordinate
 let dx = -2; // ball increment coordinate
 let dy = -3; // ball increment coordinate
@@ -38,6 +37,9 @@ let l4 = [[10,105,30,95,1,2],[10,385,30,95,1,2],[55,55,30,95,1,6],[95,55,30,95,1
 let l5 = [[10,55,30,95,1,6], [55,55,30,95,1,5], [95,55,30,95,1,4], [140,55,30,95,1,3],[185,55,30,95,1,2]]
 
 var bricks = [];
+
+function isPlaying(audelem) { return !audelem.paused; }
+
 
 function fillBricks(a, b, c, d, e, f){
     let bh = a;
@@ -65,18 +67,18 @@ if (start === false){
     drawBall();
     drawBricks();
     drawShadowBox('white',.8);
-    document.getElementById('bgmusic').pause()
+    document.getElementById('bgmusic').pause();
     drawText( 'PRESS ENTER', canvas.width/2 - (12*8), canvas.height/2, '30px Monospace','Blue');
     animationID = undefined;
 }
 
 // Draws all
 function draw() {
+    if (isPlaying = true) {document.getElementById('bgmusic').play()}
     ctx.globalAlpha = 1;
     ctx.clearRect(0,0,canvas.width,canvas.height);
     animationID = requestAnimationFrame(draw);
     drawScoreBoard();
-
     drawBricks();
     drawBall();
     drawBoard();
@@ -91,7 +93,7 @@ function draw() {
     bounce();
     boardBoundary();
     brickHit();
-    drawText('Score:' + score + ' ', canvas.width-100,10,'10px Monospace', 'black')
+    drawText('Score:' + score + ' ', canvas.width-100,10,'10px Monospace', 'black');
 }
 
 function drawScoreBoard(){
@@ -109,7 +111,6 @@ function drawBall(){
     ctx.fillStyle = 'blue';
     ctx.fill();
     ctx.closePath();
-    document.getElementById('bgmusic').play();
 }
 
 // Board movement: records state of a key when it's pressed
@@ -122,12 +123,12 @@ addEventListener('keydown', function (event){
         start = 'running';
         cancelAnimationFrame(animationID);
         animationID = undefined;
-        clearInterval(LDrawInterval);
         drawShadowBox('lightgray', 0.75);
         drawText('PAUSE', canvas.width/2 - (5*8), canvas.height/2, '30px Monospace', 'black');
         document.getElementById('bgmusic').pause();
     } else if (event.key === 'Enter' && animationID === undefined) {
         document.getElementById('bgmusic').setAttribute('loop', '');
+        document.getElementById('bgmusic').play();
         requestAnimationFrame(draw);
     } else if (event.key === 'Enter' && animationID === 'obosralsya') {
         fillBricksRow(l1.length,l1);
@@ -135,8 +136,8 @@ addEventListener('keydown', function (event){
         y = canvas.height-200; // ball coordinate
         dx = -2; // ball increment coordinate
         dy = -3; // ball increment coordinate
-        clearInterval(LDrawInterval);
         requestAnimationFrame(draw);
+        document.getElementById('bgmusic').play();
     }
 
 })
@@ -234,12 +235,11 @@ function drawBricks(){
 
         document.getElementById('bgmusic').pause();
         cancelAnimationFrame(animationID);
-        clearInterval(LDrawInterval);
         drawShadowBox('lightgray', 0.75);
-        drawText('Level ' + counter, canvas.width/2 - (8*8), canvas.height/2 + 30, '30px Monospace', 'black');
-        drawText('Your Score:' + score, canvas.width/2 - (8*16), canvas.height/2 + 60, '30px Monospace','grey');
+        drawText('Level ' + counter, canvas.width/2 - (8*8), canvas.height/2, '30px Monospace', 'black');
+        drawText('Your Score:' + score, canvas.width/2 - (8*16), canvas.height/2 + 30, '30px Monospace','black');
 
-        setTimeout(draw, 2000);
+        setTimeout(draw,3000);
         fillBricksRow(eval(l).length,eval(l));
         counter += 1;
         x = getRndInteger(30, canvas.width-30); //ball coordinate
