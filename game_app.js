@@ -64,15 +64,19 @@ fillBricksRow(l1.length,l1) // Initiate Level 1
 if (start === false){
     drawBall();
     drawBricks();
-    drawText( 'PRESS ENTER', canvas.width/2 - (12*8), canvas.height/2 + 30, '30px Monospace');
+    drawShadowBox('white',.8);
+    document.getElementById('bgmusic').pause()
+    drawText( 'PRESS ENTER', canvas.width/2 - (12*8), canvas.height/2, '30px Monospace','Blue');
     animationID = undefined;
 }
 
 // Draws all
 function draw() {
+    ctx.globalAlpha = 1;
     ctx.clearRect(0,0,canvas.width,canvas.height);
     animationID = requestAnimationFrame(draw);
     drawScoreBoard();
+
     drawBricks();
     drawBall();
     drawBoard();
@@ -105,13 +109,7 @@ function drawBall(){
     ctx.fillStyle = 'blue';
     ctx.fill();
     ctx.closePath();
-    if (y > canvas.height){
-        cancelAnimationFrame(animationID);
-        drawText('VI OBOSRALIS', canvas.width/2 - (12*8), canvas.height/2 + 30, '30px Monospace', blink())
-        animationID = 'obosralsya';
-        counter = 2;
-        score = 0;
-    }
+    document.getElementById('bgmusic').play();
 }
 
 // Board movement: records state of a key when it's pressed
@@ -125,11 +123,11 @@ addEventListener('keydown', function (event){
         cancelAnimationFrame(animationID);
         animationID = undefined;
         clearInterval(LDrawInterval);
-        drawText('PAUSE', canvas.width/2 - (5*8), canvas.height/2 + 30, '30px Monospace');
+        drawShadowBox('lightgray', 0.75);
+        drawText('PAUSE', canvas.width/2 - (5*8), canvas.height/2, '30px Monospace', 'black');
         document.getElementById('bgmusic').pause();
     } else if (event.key === 'Enter' && animationID === undefined) {
         document.getElementById('bgmusic').setAttribute('loop', '');
-        document.getElementById('bgmusic').play()
         requestAnimationFrame(draw);
     } else if (event.key === 'Enter' && animationID === 'obosralsya') {
         fillBricksRow(l1.length,l1);
@@ -155,10 +153,20 @@ addEventListener("keyup", function (event){
 // Draws board
 function drawBoard(){
     ctx.beginPath();
-    ctx.rect(bx, by, 80, 10 );
     ctx.fillStyle = 'black';
-    ctx.fill();
+    ctx.fillRect(bx, by, 80, 3 );
+    ctx.fillStyle = 'lightgrey';
+    ctx.fillRect(bx, by+3, 80, 7);
     ctx.closePath();
+    if (y > canvas.height){
+        document.getElementById('bgmusic').pause();
+        cancelAnimationFrame(animationID);
+        drawShadowBox('lightgrey',1)
+        drawText('POTRACHENO', canvas.width/2 - (10*8), canvas.height/2, '30px Monospace', 'black')
+        animationID = 'obosralsya';
+        counter = 2;
+        score = 0;
+    }
 }
 
 // Ball bouncing logic
@@ -227,11 +235,11 @@ function drawBricks(){
         document.getElementById('bgmusic').pause();
         cancelAnimationFrame(animationID);
         clearInterval(LDrawInterval);
-        drawText('Level ' + counter, canvas.width/2 - (8*8), canvas.height/2 + 30, '30px Monospace');
-        drawText('Your Score:' + score, canvas.width/2 - (8*16), canvas.height/2 + 60, '30px Monospace');
+        drawShadowBox('lightgray', 0.75);
+        drawText('Level ' + counter, canvas.width/2 - (8*8), canvas.height/2 + 30, '30px Monospace', 'black');
+        drawText('Your Score:' + score, canvas.width/2 - (8*16), canvas.height/2 + 60, '30px Monospace','grey');
 
         setTimeout(draw, 2000);
-        document.getElementById('bgmusic').play()
         fillBricksRow(eval(l).length,eval(l));
         counter += 1;
         x = getRndInteger(30, canvas.width-30); //ball coordinate
@@ -258,14 +266,10 @@ function brickHit(){
     }
 }
 
-function blink(){
-    return 'rgb(' + getRndInteger(1,255) + ',' + getRndInteger(1,255) + ',' + getRndInteger(1,255) + ')'
-}
-
 function drawText(t,x,y,f,ss){
     ctx.font = f;
-    ctx.fillStyle = 'black'
-    ctx.shadowOffsetX = 1;
+    ctx.fillStyle = ss;
+    ctx.globalAlpha = 1;
     ctx.fillText(t, x, y);
 
 }
@@ -278,4 +282,12 @@ function specialBall(brx, bry){
         ctx.fillStyle = 'red';
     }
     else ctx.fillStyle = ballColor;
+}
+
+function drawShadowBox(c,a){
+    ctx.beginPath()
+    ctx.fillStyle = c;
+    ctx.globalAlpha = a;
+    ctx.fillRect(0,0, canvas.width, canvas.height);
+    ctx.closePath();
 }
