@@ -24,11 +24,14 @@ let LDrawInterval // Blinking for loss message
 var start = false; // Flag for start screen
 var score = 0; // Counts score for bricks
 var hitornot = false; // checks whether hit ball hit a board for score multiplication
+var hitornot_2 = false; // for bonus display
 
 var rightPressed = false; // Default value for keydown event
 var leftPressed = false; // Default value for keydown event
 var animationID = undefined; // Default value for animation function.
 // var animbrick = [] // Stores Destroyed Bricks
+let visibleCountdown = 160; // For bonus display
+let brokenBricks = [];
 
 var SBM = 15; // Score Board margin;
 let l1 = [[10,55,30,95,1,6], [55,150,30,95,1,4], [100,245,30,95,1,2], [145,150,30,95,1,4], [190,55,30,95,1,6]]
@@ -36,6 +39,7 @@ let l2 = [[10,35,80,95,3,6], [50,85,80,95,2,6]] // init h, init w, h increment, 
 let l3 = [[145,55,45,95,2,6], [10,55,45,95,5,6]]
 let l4 = [[10,105,30,95,1,2],[10,385,30,95,1,2],[55,55,30,95,1,6],[95,55,30,95,1,6], [140,55,30,95,1,6],[185,105,30,95,1,5],[230,155,30,95,1,4],[275,205,30,95,1,3],[325,301,30,95,1,1]]
 let l5 = [[10,55,30,95,1,6], [55,55,30,95,1,5], [95,55,30,95,1,4], [140,55,30,95,1,3],[185,55,30,95,1,2]]
+
 
 var bricks = [];
 
@@ -71,7 +75,7 @@ if (start === false){
     drawText( 'PRESS ENTER', canvas.width/2 - (12*8), canvas.height/2, '30px Monospace','Blue');
     animationID = undefined;
 }
-
+let p;
 // Draws all
 function draw() {
     if (!isPlaying(document.getElementById('bgmusic'))) {document.getElementById('bgmusic').play()}
@@ -92,9 +96,11 @@ function draw() {
     // for(i = 0; i < animbrick.length; i++) {
     //     drawBrickDust(animbrick[i][0], animbrick[i][1]);
     // }
+
     touchDetection();
     bounce();
     boardBoundary();
+    drawBrokenBricks();
     brickHit();
     drawText('Score:' + score + ' ', canvas.width-100,10,'10px Monospace', 'black');
 }
@@ -212,6 +218,7 @@ function touchDetection() {
             dx = (2 * (1-(i / 40)))*-1;
             document.getElementById ('hit').play();
             hitornot = true;
+            hitornot_2 = false;
         }
     }
     for (let i = 41; i >= 40 && i < 80; i++) {
@@ -220,6 +227,7 @@ function touchDetection() {
             dx = (2 * ((i-40) / 40));
             document.getElementById ('hit').play();
             hitornot = true;
+            hitornot_2 = false;
         }
     }
 
@@ -265,16 +273,20 @@ function drawBricks(){
 
 // Brick hit detection
 function brickHit(){
+    let z = 0;
     for(let i=0; i<=bricks.length-1; i++){
         if((y-ballRadius*2 <= bricks[i][0]+10 && y+ballRadius >= bricks[i][0]) && (x >= bricks[i][1] && x <= bricks[i][1]+80)) {
-            // animbrick.push([bricks[i][0],bricks[i][1]])
-            scoreLogic(getRndInteger(15,20)+x,getRndInteger(15,20)+y);
+            brokenBricks.push([bricks[i][0],bricks[i][1]])
+            scoreLogic();
             bricks.splice(i, 1);
             dy = -dy;
             changeColor();
-            hitornot = false;
+            if (hitornot === true) {
+                hitornot = false;
+                hitornot_2 = true;
+            }
+
             document.getElementById ('hit').cloneNode(true).play();
-            break;
         }
     }
 }
@@ -284,7 +296,6 @@ function drawText(t,x,y,f,ss){
     ctx.fillStyle = ss;
     ctx.globalAlpha = 1;
     ctx.fillText(t, x, y);
-
 }
 function specialBall(brx, bry){
     // Level 3
@@ -313,12 +324,12 @@ function drawShadowBox(c,a){
     ctx.closePath();
 }
 
-function scoreLogic(x, y){
+function scoreLogic(){
     if (hitornot === false) {
         score += 200;
-        drawText('2x',x,y,'30px Monospace', 'black')
     } else score += 100;
 }
+
 
 // bbb = 1;
 // var bd_y = 0;
@@ -344,3 +355,21 @@ function scoreLogic(x, y){
 //         return;
 //     }
 // }
+
+// on hit brick send broken bricks to a list,
+// drawBrokenBricks in draw function (check if list is not null)
+// splice index [0] brick list in the same function if list is not null
+// update interval after each splice
+
+function drawBrokenBricks(){
+    if (brokenBricks.length > 0 && hitornot_2 === true) {
+        if(visibleCountdown > 0){
+            let l = brokenBricks;
+            drawText('2x', l[0][1], l[0][0], '20px Monospace', 'black');
+            visibleCountdown -= 1;
+        } else {
+            visibleCountdown = 160;
+            brokenBricks.splice(0,1)
+        }
+    }
+}
