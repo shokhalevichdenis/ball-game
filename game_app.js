@@ -3,7 +3,6 @@
 // Score logic
 // Initiation logic with movement up
 // Move start/stop logic to a separate function.
-// Longer board / wider canvas
 // Process when dx = 0;
 // try to make the logic of the bound on the board progressive
 
@@ -24,10 +23,12 @@ var counter = 2; // level counter
 let LDrawInterval // Blinking for loss message
 var start = false; // Flag for start screen
 var score = 0; // Counts score for bricks
+var hitornot = false; // checks whether hit ball hit a board for score multiplication
 
 var rightPressed = false; // Default value for keydown event
 var leftPressed = false; // Default value for keydown event
 var animationID = undefined; // Default value for animation function.
+// var animbrick = [] // Stores Destroyed Bricks
 
 var SBM = 15; // Score Board margin;
 let l1 = [[10,55,30,95,1,6], [55,150,30,95,1,4], [100,245,30,95,1,2], [145,150,30,95,1,4], [190,55,30,95,1,6]]
@@ -39,7 +40,6 @@ let l5 = [[10,55,30,95,1,6], [55,55,30,95,1,5], [95,55,30,95,1,4], [140,55,30,95
 var bricks = [];
 
 function isPlaying(audelem) { return !audelem.paused; }
-
 
 function fillBricks(a, b, c, d, e, f){
     let bh = a;
@@ -74,7 +74,7 @@ if (start === false){
 
 // Draws all
 function draw() {
-    if (isPlaying = true) {document.getElementById('bgmusic').play()}
+    if (!isPlaying(document.getElementById('bgmusic'))) {document.getElementById('bgmusic').play()}
     ctx.globalAlpha = 1;
     ctx.clearRect(0,0,canvas.width,canvas.height);
     animationID = requestAnimationFrame(draw);
@@ -89,6 +89,9 @@ function draw() {
     } else if (leftPressed) {
         bx += -bdx;
     }
+    // for(i = 0; i < animbrick.length; i++) {
+    //     drawBrickDust(animbrick[i][0], animbrick[i][1]);
+    // }
     touchDetection();
     bounce();
     boardBoundary();
@@ -208,6 +211,7 @@ function touchDetection() {
             dy = -3;
             dx = (2 * (1-(i / 40)))*-1;
             document.getElementById ('hit').play();
+            hitornot = true;
         }
     }
     for (let i = 41; i >= 40 && i < 80; i++) {
@@ -215,8 +219,10 @@ function touchDetection() {
             dy = -3;
             dx = (2 * ((i-40) / 40));
             document.getElementById ('hit').play();
+            hitornot = true;
         }
     }
+
 }
 
 // Draw Bricks
@@ -235,20 +241,25 @@ function drawBricks(){
 
         document.getElementById('bgmusic').pause();
         cancelAnimationFrame(animationID);
-        drawShadowBox('lightgray', 0.75);
-        drawText('Level ' + counter, canvas.width/2 - (8*8), canvas.height/2, '30px Monospace', 'black');
-        drawText('Your Score:' + score, canvas.width/2 - (8*16), canvas.height/2 + 30, '30px Monospace','black');
 
         setTimeout(draw,3000);
         fillBricksRow(eval(l).length,eval(l));
-        counter += 1;
         x = getRndInteger(30, canvas.width-30); //ball coordinate
         y = canvas.height-200; // ball coordinate
+        for(let i=0; i < bricks.length; i++) {
+            drawBrick(bricks[i][1], bricks[i][0]);
+        }
+        drawShadowBox('lightgrey', 0.85);
+        drawText('Level ' + counter, canvas.width/2 - (8*8), canvas.height/2, '30px Monospace', 'black');
+        drawText('Your Score:' + score, canvas.width/2 - (8*16), canvas.height/2 + 30, '30px Monospace','black');
+        let dy = -3; // ball increment coordinate
+        counter += 1;
         // dx < 0 ? dx += -0.14 : dx += 0.14; // ball increment coordinate
         // dy < 0 ? dy += -0.21 : dy += -dy*2-0.21; // ball increment coordinate
-    }
-    for(let i=0; i < bricks.length; i++) {
-        drawBrick(bricks[i][1], bricks[i][0]);
+    } else {
+        for(let i=0; i < bricks.length; i++) {
+            drawBrick(bricks[i][1], bricks[i][0]);
+        }
     }
 }
 
@@ -256,10 +267,12 @@ function drawBricks(){
 function brickHit(){
     for(let i=0; i<=bricks.length-1; i++){
         if((y-ballRadius*2 <= bricks[i][0]+10 && y+ballRadius >= bricks[i][0]) && (x >= bricks[i][1] && x <= bricks[i][1]+80)) {
+            // animbrick.push([bricks[i][0],bricks[i][1]])
+            scoreLogic(getRndInteger(15,20)+x,getRndInteger(15,20)+y);
             bricks.splice(i, 1);
             dy = -dy;
             changeColor();
-            score += 100;
+            hitornot = false;
             document.getElementById ('hit').cloneNode(true).play();
             break;
         }
@@ -281,6 +294,14 @@ function specialBall(brx, bry){
     } else if (counter === 5) {
         ctx.fillStyle = 'red';
     }
+    // Level 2
+    else if (counter === 3) {
+        ctx.fillStyle = 'orange';
+    }
+    // Level 1
+    else if (counter === 2) {
+        ctx.fillStyle = 'lightblue';
+    }
     else ctx.fillStyle = ballColor;
 }
 
@@ -291,3 +312,35 @@ function drawShadowBox(c,a){
     ctx.fillRect(0,0, canvas.width, canvas.height);
     ctx.closePath();
 }
+
+function scoreLogic(x, y){
+    if (hitornot === false) {
+        score += 200;
+        drawText('2x',x,y,'30px Monospace', 'black')
+    } else score += 100;
+}
+
+// bbb = 1;
+// var bd_y = 0;
+// function drawBrickDust(bd_x,bd,bd_w,bd_h){
+//     if (bd_y < canvas.height) {
+//         ctx.beginPath();
+//         ctx.fillStyle = 'red';
+//         ctx.fillRect(bd_x + getRndInteger(10,50),bd + bd_y,1,-getRndInteger(4,5));
+//         ctx.fillRect(bd_x + getRndInteger(10,50),bd + bd_y,1,-getRndInteger(4,5));
+//         ctx.fillRect(bd_x + getRndInteger(10,50),bd + bd_y,1,-getRndInteger(4,5));
+//         ctx.fillRect(bd_x + getRndInteger(10,50),bd + bd_y,1,-getRndInteger(4,5));
+//         ctx.fillRect(bd_x + getRndInteger(10,50),bd + bd_y,1,-getRndInteger(4,5));
+//         ctx.fillRect(bd_x + getRndInteger(10,50),bd + bd_y,1,-getRndInteger(4,5));
+//         ctx.fillRect(bd_x + getRndInteger(10,50),bd + bd_y,1,-getRndInteger(4,5));
+//         ctx.closePath();
+//         fd =  animbrick[0][1] + 5
+//         animbrick[0].fill(fd,1,1)
+//         if (bd_y < canvas.height/2) {
+//             ctx.globalAlpha = bbb;
+//             bbb -= 0.02
+//         } if (bd_y > canvas.height) {bd_y = 0;}
+//     } else {
+//         return;
+//     }
+// }
