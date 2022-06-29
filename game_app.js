@@ -23,19 +23,17 @@ var counter = 2; // level counter
 let LDrawInterval // Blinking for loss message
 var start = false; // Flag for start screen
 var score = 0; // Counts score for bricks
-var hitornot = false; // checks whether hit ball hit a board for score multiplication
-var hitornot_2 = false; // for bonus display
+var touchedBoard = true;
 
 var rightPressed = false; // Default value for keydown event
 var leftPressed = false; // Default value for keydown event
 var animationID = undefined; // Default value for animation function.
 // var animbrick = [] // Stores Destroyed Bricks
-let visibleCountdown = 160; // For bonus display
-let brokenBricks = [];
+let brokenBricks = []; // Broken bricks array
 
 var SBM = 15; // Score Board margin;
 let l1 = [[10,55,30,95,1,6], [55,150,30,95,1,4], [100,245,30,95,1,2], [145,150,30,95,1,4], [190,55,30,95,1,6]]
-let l2 = [[10,35,80,95,3,6], [50,85,80,95,2,6]] // init h, init w, h increment, w inc, n rows, n bricks
+let l2 = [[10,35,80,95,3,6], [50,85,80,95,2,6]] // init y, init x, h increment, w inc, n rows, n bricks
 let l3 = [[145,55,45,95,2,6], [10,55,45,95,5,6]]
 let l4 = [[10,105,30,95,1,2],[10,385,30,95,1,2],[55,55,30,95,1,6],[95,55,30,95,1,6], [140,55,30,95,1,6],[185,105,30,95,1,5],[230,155,30,95,1,4],[275,205,30,95,1,3],[325,301,30,95,1,1]]
 let l5 = [[10,55,30,95,1,6], [55,55,30,95,1,5], [95,55,30,95,1,4], [140,55,30,95,1,3],[185,55,30,95,1,2]]
@@ -65,7 +63,7 @@ function fillBricksRow(r, li){
     }
 }
 
-fillBricksRow(l1.length,l1) // Initiate Level 1
+fillBricksRow(l3.length,l3) // Initiate Level 1
 
 if (start === false){
     drawBall();
@@ -217,8 +215,8 @@ function touchDetection() {
             dy = -3;
             dx = (2 * (1-(i / 40)))*-1;
             document.getElementById ('hit').play();
-            hitornot = true;
-            hitornot_2 = false;
+            touchedBoard = true;
+            tbt = 0;
         }
     }
     for (let i = 41; i >= 40 && i < 80; i++) {
@@ -226,8 +224,8 @@ function touchDetection() {
             dy = -3;
             dx = (2 * ((i-40) / 40));
             document.getElementById ('hit').play();
-            hitornot = true;
-            hitornot_2 = false;
+            touchedBoard = true;
+            tbt = 0;
         }
     }
 
@@ -271,22 +269,27 @@ function drawBricks(){
     }
 }
 
+let tbt = 0;
+
 // Brick hit detection
 function brickHit(){
-    let z = 0;
     for(let i=0; i<=bricks.length-1; i++){
         if((y-ballRadius*2 <= bricks[i][0]+10 && y+ballRadius >= bricks[i][0]) && (x >= bricks[i][1] && x <= bricks[i][1]+80)) {
-            brokenBricks.push([bricks[i][0],bricks[i][1]])
+            brokenBricks.push([bricks[i][0],bricks[i][1],60])
             scoreLogic();
             bricks.splice(i, 1);
             dy = -dy;
             changeColor();
-            if (hitornot === true) {
-                hitornot = false;
-                hitornot_2 = true;
+
+            if (tbt === 0) {
+                tbt = 1;
+            } else if (tbt === 1 && touchedBoard === true) {
+                touchedBoard = false;
+                tbt = 0;
             }
 
             document.getElementById ('hit').cloneNode(true).play();
+            break;
         }
     }
 }
@@ -325,51 +328,25 @@ function drawShadowBox(c,a){
 }
 
 function scoreLogic(){
-    if (hitornot === false) {
+    if (touchedBoard === false) {
         score += 200;
     } else score += 100;
 }
 
-
-// bbb = 1;
-// var bd_y = 0;
-// function drawBrickDust(bd_x,bd,bd_w,bd_h){
-//     if (bd_y < canvas.height) {
-//         ctx.beginPath();
-//         ctx.fillStyle = 'red';
-//         ctx.fillRect(bd_x + getRndInteger(10,50),bd + bd_y,1,-getRndInteger(4,5));
-//         ctx.fillRect(bd_x + getRndInteger(10,50),bd + bd_y,1,-getRndInteger(4,5));
-//         ctx.fillRect(bd_x + getRndInteger(10,50),bd + bd_y,1,-getRndInteger(4,5));
-//         ctx.fillRect(bd_x + getRndInteger(10,50),bd + bd_y,1,-getRndInteger(4,5));
-//         ctx.fillRect(bd_x + getRndInteger(10,50),bd + bd_y,1,-getRndInteger(4,5));
-//         ctx.fillRect(bd_x + getRndInteger(10,50),bd + bd_y,1,-getRndInteger(4,5));
-//         ctx.fillRect(bd_x + getRndInteger(10,50),bd + bd_y,1,-getRndInteger(4,5));
-//         ctx.closePath();
-//         fd =  animbrick[0][1] + 5
-//         animbrick[0].fill(fd,1,1)
-//         if (bd_y < canvas.height/2) {
-//             ctx.globalAlpha = bbb;
-//             bbb -= 0.02
-//         } if (bd_y > canvas.height) {bd_y = 0;}
-//     } else {
-//         return;
-//     }
-// }
-
-// on hit brick send broken bricks to a list,
-// drawBrokenBricks in draw function (check if list is not null)
-// splice index [0] brick list in the same function if list is not null
-// update interval after each splice
-
+/**
+ * Get broken bricks coordinates and display time (60fps) from the brokenBricks list,
+ * and draws at the position of a brick for a second.
+ */
 function drawBrokenBricks(){
-    if (brokenBricks.length > 0 && hitornot_2 === true) {
-        if(visibleCountdown > 0){
-            let l = brokenBricks;
-            drawText('2x', l[0][1], l[0][0], '20px Monospace', 'black');
-            visibleCountdown -= 1;
-        } else {
-            visibleCountdown = 160;
-            brokenBricks.splice(0,1)
+    if (brokenBricks.length > 0){
+        let l = brokenBricks;
+        for (let i=0; i < l.length; i++) {
+            if (l[i][2] > 0) {
+                touchedBoard === true ? 1+1 : drawText('2x', l[i][1]+12+getRndInteger(15,20), l[i][0], '20px Monospace', 'black');
+                brokenBricks[i][2] -= 1;
+            } else {
+                brokenBricks.splice(0, 1)
+            }
         }
     }
 }
