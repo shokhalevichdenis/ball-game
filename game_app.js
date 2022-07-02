@@ -31,13 +31,13 @@ var animationID = undefined; // Default value for animation function.
 // var animbrick = [] // Stores Destroyed Bricks
 let brokenBricks = []; // Broken bricks array
 
+let music = "l2"
+
 var SBM = 15; // Score Board margin;
 let l1 = [[10,55,30,95,1,6], [55,150,30,95,1,4], [100,245,30,95,1,2], [145,150,30,95,1,4], [190,55,30,95,1,6]]
 let l2 = [[10,35,80,95,3,6], [50,85,80,95,2,6]] // init y, init x, h increment, w inc, n rows, n bricks
 let l3 = [[145,55,45,95,2,6], [10,55,45,95,5,6]]
 let l4 = [[10,105,30,95,1,2],[10,385,30,95,1,2],[55,55,30,95,1,6],[95,55,30,95,1,6], [140,55,30,95,1,6],[185,105,30,95,1,5],[230,155,30,95,1,4],[275,205,30,95,1,3],[325,301,30,95,1,1]]
-let l5 = [[10,55,30,95,1,6], [55,55,30,95,1,5], [95,55,30,95,1,4], [140,55,30,95,1,3],[185,55,30,95,1,2]]
-
 
 var bricks = [];
 
@@ -63,20 +63,20 @@ function fillBricksRow(r, li){
     }
 }
 
-fillBricksRow(l3.length,l3) // Initiate Level 1
+fillBricksRow(l1.length,l1) // Initiate Level 1
 
 if (start === false){
     drawBall();
     drawBricks();
     drawShadowBox('white',.8);
-    document.getElementById('bgmusic').pause();
+    document.getElementById(music).pause();
     drawText( 'PRESS ENTER', canvas.width/2 - (12*8), canvas.height/2, '30px Monospace','Blue');
     animationID = undefined;
 }
-let p;
+
 // Draws all
 function draw() {
-    if (!isPlaying(document.getElementById('bgmusic'))) {document.getElementById('bgmusic').play()}
+    if (!isPlaying(document.getElementById(music))) {document.getElementById(music).play()}
     ctx.globalAlpha = 1;
     ctx.clearRect(0,0,canvas.width,canvas.height);
     animationID = requestAnimationFrame(draw);
@@ -100,7 +100,11 @@ function draw() {
     boardBoundary();
     drawBrokenBricks();
     brickHit();
-    drawText('Score:' + score + ' ', canvas.width-100,10,'10px Monospace', 'black');
+    drawText('S', canvas.width-90,10,'10px Monospace', 'black');
+    drawText('c', canvas.width-82,10,'10px Monospace', 'black');
+    drawText('o', canvas.width-74,10,'10px Monospace', 'blue');
+    drawText('r', canvas.width-66,10,'10px Monospace', 'black');
+    drawText('e: ' + score + ' ', canvas.width-58,10,'10px Monospace', 'black');
 }
 
 function drawScoreBoard(){
@@ -132,10 +136,10 @@ addEventListener('keydown', function (event){
         animationID = undefined;
         drawShadowBox('lightgray', 0.75);
         drawText('PAUSE', canvas.width/2 - (5*8), canvas.height/2, '30px Monospace', 'black');
-        document.getElementById('bgmusic').pause();
+        document.getElementById(music).pause();
     } else if (event.key === 'Enter' && animationID === undefined) {
-        document.getElementById('bgmusic').setAttribute('loop', '');
-        document.getElementById('bgmusic').play();
+        document.getElementById(music).setAttribute('loop', '');
+        document.getElementById(music).play();
         requestAnimationFrame(draw);
     } else if (event.key === 'Enter' && animationID === 'obosralsya') {
         fillBricksRow(l1.length,l1);
@@ -143,8 +147,13 @@ addEventListener('keydown', function (event){
         y = canvas.height-200; // ball coordinate
         dx = -2; // ball increment coordinate
         dy = -3; // ball increment coordinate
+        touchedBoard = true;
+        brokenBricks = [];
+        tbt = 0;
         requestAnimationFrame(draw);
-        document.getElementById('bgmusic').play();
+        music = "l2";
+        document.getElementById(music).play();
+
     }
 
 })
@@ -167,10 +176,11 @@ function drawBoard(){
     ctx.fillRect(bx, by+3, 80, 7);
     ctx.closePath();
     if (y > canvas.height){
-        document.getElementById('bgmusic').pause();
+        document.getElementById(music).pause();
         cancelAnimationFrame(animationID);
         drawShadowBox('lightgrey',1)
         drawText('POTRACHENO', canvas.width/2 - (10*8), canvas.height/2, '30px Monospace', 'black')
+        drawText('PRESS ENTER', canvas.width/2 - (11*8), canvas.height/2+40, '30px Monospace', 'blue')
         animationID = 'obosralsya';
         counter = 2;
         score = 0;
@@ -243,12 +253,12 @@ function drawBrick(brx, bry){
 //
 function drawBricks(){
     if (bricks.length === 0) { //New Level
+        document.getElementById(music).pause();
         let l = 'l'+counter;
 
-        document.getElementById('bgmusic').pause();
         cancelAnimationFrame(animationID);
 
-        setTimeout(draw,3000);
+
         fillBricksRow(eval(l).length,eval(l));
         x = getRndInteger(30, canvas.width-30); //ball coordinate
         y = canvas.height-200; // ball coordinate
@@ -256,10 +266,28 @@ function drawBricks(){
             drawBrick(bricks[i][1], bricks[i][0]);
         }
         drawShadowBox('lightgrey', 0.85);
-        drawText('Level ' + counter, canvas.width/2 - (8*8), canvas.height/2, '30px Monospace', 'black');
-        drawText('Your Score:' + score, canvas.width/2 - (8*16), canvas.height/2 + 30, '30px Monospace','black');
-        let dy = -3; // ball increment coordinate
+        drawText('Level ' + counter, canvas.width/2 - (11*8), canvas.height/2 - 20, '45px Monospace', 'black');
+        drawText('S', canvas.width/2 - 44,canvas.height/2 + 30,'30px Monospace', 'black');
+        drawText('c', canvas.width/2 - 24,canvas.height/2 + 30,'30px Monospace', 'black');
+        drawText('o', canvas.width/2 - 0,canvas.height/2 + 30,'30px Monospace', 'blue');
+        drawText('r', canvas.width/2 + 20,canvas.height/2 + 30,'30px Monospace', 'black');
+        drawText('e', canvas.width - (8*16)-158,canvas.height/2 + 30,'30px Monospace', 'black');
+        drawText(score + '', canvas.width/2 - String(score).length*7.2,canvas.height/2 + 60,'30px Monospace', 'black');
+
+        dy = -3; // ball increment coordinate
         counter += 1;
+        if(counter === 6) {
+            document.getElementById(music).pause();
+            cancelAnimationFrame(animationID);
+            brokenBricks = [];
+            drawShadowBox('lightgrey',1)
+            drawText('I.C.  WIENER!', canvas.width/2 - (13.5*8), canvas.height/2, '30px Monospace', 'black')
+            return
+        }
+        setTimeout(draw,3000);
+        music = "l"+counter;
+
+        brokenBricks = [];
         // dx < 0 ? dx += -0.14 : dx += 0.14; // ball increment coordinate
         // dy < 0 ? dy += -0.21 : dy += -dy*2-0.21; // ball increment coordinate
     } else {
@@ -294,12 +322,16 @@ function brickHit(){
     }
 }
 
-function drawText(t,x,y,f,ss){
+function drawText(t,x,y,f,ss,a){
     ctx.font = f;
     ctx.fillStyle = ss;
-    ctx.globalAlpha = 1;
+    if (a !== undefined) {
+        a = 0.01666 * a
+    } else a = 1; // If a is null/undefined then a = 1, else .1666*a
+    ctx.globalAlpha = a;
     ctx.fillText(t, x, y);
 }
+
 function specialBall(brx, bry){
     // Level 3
     if(counter === 4 && bry > 150){
@@ -314,7 +346,7 @@ function specialBall(brx, bry){
     }
     // Level 1
     else if (counter === 2) {
-        ctx.fillStyle = 'lightblue';
+        ctx.fillStyle = ballColor;
     }
     else ctx.fillStyle = ballColor;
 }
@@ -327,22 +359,34 @@ function drawShadowBox(c,a){
     ctx.closePath();
 }
 
+let bonusHits = 1;
 function scoreLogic(){
+    
     if (touchedBoard === false) {
-        score += 200;
-    } else score += 100;
+        bonusHits +=1
+        score += 100*bonusHits;
+    } else {
+        score += 100;
+        bonusHits = 1;
+    }
 }
 
 /**
- * Get broken bricks coordinates and display time (60fps) from the brokenBricks list,
- * and draws at the position of a brick for a second.
+ * Gets broken bricks coordinates and display-time (60fps) from the brokenBricks list.
+ * Then draws at the position of a brick for a second and deletes a brick from brokenBricks.
  */
 function drawBrokenBricks(){
     if (brokenBricks.length > 0){
-        let l = brokenBricks;
-        for (let i=0; i < l.length; i++) {
-            if (l[i][2] > 0) {
-                touchedBoard === true ? 1+1 : drawText('2x', l[i][1]+12+getRndInteger(15,20), l[i][0], '20px Monospace', 'black');
+        for (let i=0; i < brokenBricks.length; i++) {
+            if (brokenBricks[i][2] > 0) {
+                if (touchedBoard === true) {
+                    drawText('100', brokenBricks[i][1] + 12 + getRndInteger(15, 20), brokenBricks[i][0], '20px Monospace', "blue", brokenBricks[i][2]);
+                } else {
+                    if (brokenBricks[i][3] === undefined) {
+                        brokenBricks[i].push(bonusHits)
+                    }
+                    drawText(  100 * brokenBricks[i][3] +'', brokenBricks[i][1] + 12 + getRndInteger(15, 20), brokenBricks[i][0], '20px Monospace', ballColor, brokenBricks[i][2]);
+                }
                 brokenBricks[i][2] -= 1;
             } else {
                 brokenBricks.splice(0, 1)
@@ -350,3 +394,8 @@ function drawBrokenBricks(){
         }
     }
 }
+
+
+// TODO: Music for Each level;
+// TODO: End screen
+// TODO: Clean Code
