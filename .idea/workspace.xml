@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="eeac7c7a-a715-4b52-adf8-e5b2df53db7f" name="Changes" comment="Complete version. Needs REFACTORING.">
+      <change beforePath="$PROJECT_DIR$/bgmusic.mp3" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2B9MLckxaxXWhb8Z0U82SZ0H5uJ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="eeac7c7a-a715-4b52-adf8-e5b2df53db7f" name="Changes" comment="" />
+      <created>1656313792274</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1656313792274</updated>
+      <workItem from="1656313793348" duration="16000" />
+      <workItem from="1656313845796" duration="2985000" />
+      <workItem from="1656354940396" duration="11465000" />
+      <workItem from="1656397453138" duration="3151000" />
+      <workItem from="1656439932011" duration="1281000" />
+      <workItem from="1656445467791" duration="1300000" />
+      <workItem from="1656450824090" duration="3388000" />
+      <workItem from="1656454324510" duration="176000" />
+      <workItem from="1656456754063" duration="1791000" />
+      <workItem from="1656469591327" duration="1907000" />
+      <workItem from="1656481921289" duration="4296000" />
+      <workItem from="1656511649884" duration="645000" />
+      <workItem from="1656533456449" duration="746000" />
+      <workItem from="1656709329088" duration="7858000" />
+      <workItem from="1656721213498" duration="1209000" />
+      <workItem from="1656727526579" duration="3430000" />
+      <workItem from="1656738781165" duration="59000" />
+      <workItem from="1657147609147" duration="151000" />
+    </task>
+    <task id="LOCAL-00001" summary="Some fixes">
+      <created>1656316831845</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1656316831845</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Score logic.">
+      <created>1656400573659</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1656400573659</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Displaying Bonus logic.">
+      <created>1656458547789</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1656458547789</updated>
+    </task>
+    <task id="LOCAL-00004" summary="+drawing broken bricks &#10;+displaying bonus score logic.">
+      <created>1656487864275</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1656487864275</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Complete version. Needs REFACTORING.">
+      <created>1656731337211</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1656731337211</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Some fixes" />
+    <MESSAGE value="Score logic." />
+    <MESSAGE value="Displaying Bonus logic." />
+    <MESSAGE value="+drawing broken bricks &#10;+displaying bonus score logic." />
+    <MESSAGE value="Complete version. Needs REFACTORING." />
+    <option name="LAST_COMMIT_MESSAGE" value="Complete version. Needs REFACTORING." />
+  </component>
+</project>

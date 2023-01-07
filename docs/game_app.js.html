@@ -1,4 +1,32 @@
-// Ball Game on Canvas 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: game_app.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: game_app.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Ball Game on Canvas 
 
 // Global variables and constants 
 const canvas = document.querySelector('canvas');
@@ -45,8 +73,8 @@ function isPlaying(audelem) { return !audelem.paused; } // Checking music status
 function fillBricks(a, b, c, d, e, f){
     let bh = a;
     let bw = b;
-    for (let i=0; i < e; i++) {
-        for (let i=0; i < f; i++) {
+    for (let i=0; i &lt; e; i++) {
+        for (let i=0; i &lt; f; i++) {
             bricks.push([bh+scoreBoardMargin, bw])
             bw += d;
         }
@@ -62,7 +90,7 @@ function fillBricks(a, b, c, d, e, f){
  */
 function fillBricksRow(r, li){
     bricks = [];
-    for(let i=0; i < r; i++){
+    for(let i=0; i &lt; r; i++){
         fillBricks(li[i][0],li[i][1],li[i][2],li[i][3],li[i][4],li[i][5]);
     }
 }
@@ -139,18 +167,18 @@ addEventListener('keydown', function (event){
         rightPressed = true;
     } else if(event.key === 'ArrowLeft') {
         leftPressed = true;
-    } else if (event.key === 'Enter' && animationID > 0) {
+    } else if (event.key === 'Enter' &amp;&amp; animationID > 0) {
         start = 'running';
         cancelAnimationFrame(animationID);
         animationID = undefined;
         drawShadowBox('lightgray', 0.75);
         drawText('PAUSE', canvas.width/2 - (5*8), canvas.height/2, '30px Monospace', 'black');
         document.getElementById(music).pause();
-    } else if (event.key === 'Enter' && animationID === undefined) {
+    } else if (event.key === 'Enter' &amp;&amp; animationID === undefined) {
         document.getElementById(music).setAttribute('loop', '');
         document.getElementById(music).play();
         requestAnimationFrame(draw);
-    } else if (event.key === 'Enter' && animationID === 'failed') {
+    } else if (event.key === 'Enter' &amp;&amp; animationID === 'failed') {
         fillBricksRow(l1.length,l1);
         x = getRndInteger(30, canvas.width-30);
         y = canvas.height-200;
@@ -200,11 +228,11 @@ function drawBoard(){
  * Ball bouncing logic.
  */
 function bounce(){
-    if((y + dy) < ballRadius){
+    if((y + dy) &lt; ballRadius){
         dy = -dy;
         changeColor();
         document.getElementById ('hit').cloneNode(true).play();
-    } else if((x + dx) < ballRadius || (x + dx) > canvas.width - ballRadius){
+    } else if((x + dx) &lt; ballRadius || (x + dx) > canvas.width - ballRadius){
         dx = -dx;
         changeColor();
         document.getElementById ('hit').cloneNode(true).play();
@@ -231,7 +259,7 @@ function changeColor(){
 function boardBoundary() {
     if (bx >= canvas.width - 80) {
         bx = canvas.width - 80;
-    } else if (bx <= 0){
+    } else if (bx &lt;= 0){
         bx = 0;
     }
 }
@@ -240,8 +268,8 @@ function boardBoundary() {
  * Detects board touch.
  */
 function touchDetection() {
-    for (let i = 0; i < 41; i++) {
-        if (((y + ballRadius) >= by) && ((x + ballRadius) >= bx + i && x <= bx + i)) {
+    for (let i = 0; i &lt; 41; i++) {
+        if (((y + ballRadius) >= by) &amp;&amp; ((x + ballRadius) >= bx + i &amp;&amp; x &lt;= bx + i)) {
             dy = -3;
             dx = (2 * (1-(i / 40)))*-1;
             document.getElementById ('hit').play();
@@ -249,8 +277,8 @@ function touchDetection() {
             repeatTouch = 0;
         }
     }
-    for (let i = 41; i >= 40 && i < 80; i++) {
-        if (((y + ballRadius) >= by) && (x >= bx + i && (x-ballRadius) <= bx + i)) {
+    for (let i = 41; i >= 40 &amp;&amp; i &lt; 80; i++) {
+        if (((y + ballRadius) >= by) &amp;&amp; (x >= bx + i &amp;&amp; (x-ballRadius) &lt;= bx + i)) {
             dy = -3;
             dx = (2 * ((i-40) / 40));
             document.getElementById ('hit').play();
@@ -287,7 +315,7 @@ function changeLevel(){
         fillBricksRow(eval(l).length,eval(l));
         x = getRndInteger(30, canvas.width-30);
         y = canvas.height-200;
-        for(let i=0; i < bricks.length; i++) {
+        for(let i=0; i &lt; bricks.length; i++) {
             drawBrick(bricks[i][1], bricks[i][0]);
         }
         // Draws screen between levels.
@@ -315,7 +343,7 @@ function changeLevel(){
         music = "l"+counter;
         brokenBricks = [];
     } else {
-        for(let i=0; i < bricks.length; i++) {
+        for(let i=0; i &lt; bricks.length; i++) {
             drawBrick(bricks[i][1], bricks[i][0]);
         }
     }
@@ -325,8 +353,8 @@ function changeLevel(){
  * Detects brick hit.
  */
 function brickHit(){
-    for(let i=0; i<=bricks.length-1; i++){
-        if((y-ballRadius*2 <= bricks[i][0]+10 && y+ballRadius >= bricks[i][0]) && (x+10 >= bricks[i][1] && x-10 <= bricks[i][1]+80)) {
+    for(let i=0; i&lt;=bricks.length-1; i++){
+        if((y-ballRadius*2 &lt;= bricks[i][0]+10 &amp;&amp; y+ballRadius >= bricks[i][0]) &amp;&amp; (x+10 >= bricks[i][1] &amp;&amp; x-10 &lt;= bricks[i][1]+80)) {
             brokenBricks.push([bricks[i][0],bricks[i][1],60])
             scoreLogic();
             bricks.splice(i, 1);
@@ -335,7 +363,7 @@ function brickHit(){
 
             if (repeatTouch === 0) {
                 repeatTouch = 1;
-            } else if (repeatTouch === 1 && touchedBoard === true) {
+            } else if (repeatTouch === 1 &amp;&amp; touchedBoard === true) {
                 touchedBoard = false;
                 repeatTouch = 0;
             }
@@ -372,7 +400,7 @@ function drawText(t,x,y,f,ss,a){
  */
 function specialBricks(brx, bry){
     // Level 3
-    if(counter === 4 && bry > 150){
+    if(counter === 4 &amp;&amp; bry > 150){
         ctx.fillStyle = 'lightgray';
     // Level 4
     } else if (counter === 5) {
@@ -418,7 +446,7 @@ function scoreLogic(){
  */
 function drawBrokenBricks(){
     if (brokenBricks.length > 0){
-        for (let i=0; i < brokenBricks.length; i++) {
+        for (let i=0; i &lt; brokenBricks.length; i++) {
             if (brokenBricks[i][2] > 0) {
                 if (touchedBoard === true) {
                     drawText('100', brokenBricks[i][1] + 12 + getRndInteger(15, 20), brokenBricks[i][0], '20px Monospace', "blue", brokenBricks[i][2]);
@@ -434,4 +462,26 @@ function drawBrokenBricks(){
             }
         }
     }
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#boardBoundary">boardBoundary</a></li><li><a href="global.html#bounce">bounce</a></li><li><a href="global.html#brickHit">brickHit</a></li><li><a href="global.html#changeColor">changeColor</a></li><li><a href="global.html#changeLevel">changeLevel</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#drawBall">drawBall</a></li><li><a href="global.html#drawBoard">drawBoard</a></li><li><a href="global.html#drawBrick">drawBrick</a></li><li><a href="global.html#drawBrokenBricks">drawBrokenBricks</a></li><li><a href="global.html#drawScoreBoard">drawScoreBoard</a></li><li><a href="global.html#drawShadowBox">drawShadowBox</a></li><li><a href="global.html#drawText">drawText</a></li><li><a href="global.html#fillBricks">fillBricks</a></li><li><a href="global.html#fillBricksRow">fillBricksRow</a></li><li><a href="global.html#getRndInteger">getRndInteger</a></li><li><a href="global.html#specialBricks">specialBricks</a></li><li><a href="global.html#touchDetection">touchDetection</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Jan 06 2023 22:03:44 GMT-0800 (Pacific Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
